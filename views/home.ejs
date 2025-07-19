@@ -1,0 +1,77 @@
+<%- include('partials/navbar', { page: "/" }) %>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Climate Solutions</title>
+
+</head>
+    <link href="/main.css" rel="stylesheet">
+
+<body>
+
+<div class="navbar bg-base-100">
+  <div class="flex-1">
+    <a class="btn btn-ghost text-xl" href="/">Climate Solutions</a>
+  </div>
+  <div class="flex-none">
+    <ul class="menu menu-horizontal px-1">
+      <li><a href="/about">About</a></li>
+      <li>
+        <details>
+          <summary>Sector</summary>
+          <ul class="p-2 bg-base-100">
+            <li><a href="/solutions/projects?sector=Land Sinks">Land Sinks</a></li>
+            <li><a href="/solutions/projects?sector=agriculture">Agriculture</a></li>
+            <li><a href="/solutions/projects?sector=transport">Transport</a></li>
+          </ul>
+        </details>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="container mx-auto p-6">
+  <div class="hero bg-base-200 p-8 rounded-xl mb-6">
+    <div class="hero-content text-center">
+      <div class="max-w-md">
+        <h1 class="text-4xl font-bold">Explore Climate Projects</h1>
+        <p class="py-6">Learn more about climate change solutions across various sectors.</p>
+        <a class="btn btn-primary" href="/solutions/projects">Explore Projects</a>
+      </div>
+    </div>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="card bg-base-100 shadow-xl">
+      <figure><img src="/images/industry.jpeg" alt="Industry"/></figure>
+      <div class="card-body">
+        <h2 class="card-title">Industry</h2>
+        <p>Scaling Indusrty infrastructure to remote areas.</p>
+        <a class="btn btn-primary" href="/solutions/projects/1">Learn More</a>
+      </div>
+    </div>
+    <div class="card bg-base-100 shadow-xl">
+      <figure><img src="/images/transportation.jpeg" alt="Transport Initiative"/></figure>
+      <div class="card-body">
+        <h2 class="card-title">Green Transport Initiative</h2>
+        <p>Promoting eco-friendly public transport systems.</p>
+        <a class="btn btn-primary" href="/solutions/projects/2">Learn More</a>
+      </div>
+    </div>
+    <div class="card bg-base-100 shadow-xl">
+      <figure><img src="/images/LandSinks.jpeg" alt="Organic Farming Movement"/></figure>
+      <div class="card-body">
+        <h2 class="card-title">Organic Farming Movement</h2>
+        <p>Encouraging sustainable farming practices.</p>
+        <a class="btn btn-primary" href="/solutions/projects/3">Learn More</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
+
+

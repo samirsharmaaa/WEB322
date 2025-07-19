@@ -1,42 +1,134 @@
-const projectData = require("../data/projectData");
-const sectorData = require("../data/sectorData");
 
-let projects = [];
+
+require('dotenv').config();
+require('pg');
+const Sequelize = require('sequelize');
+
+let sequelize = new Sequelize(
+  process.env.PGDATABASE,
+  process.env.PGUSER,
+  process.env.PGPASSWORD,
+  {
+    host: process.env.PGHOST,
+    dialect: 'postgres',
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
+      }
+    }
+  }
+);
+
+// Define Sector model
+const Sector = sequelize.define('Sector', {
+  id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
+  sector_name: Sequelize.STRING
+}, {
+  createdAt: false,
+  updatedAt: false
+});
+
+// Define Project model
+const Project = sequelize.define('Project', {
+  id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
+  title: Sequelize.STRING,
+  feature_img_url: Sequelize.STRING,
+  summary_short: Sequelize.TEXT,
+  intro_short: Sequelize.TEXT,
+  impact: Sequelize.TEXT,
+  original_source_url: Sequelize.STRING
+}, {
+  createdAt: false,
+  updatedAt: false
+});
+
+// Define association
+Project.belongsTo(Sector, { foreignKey: 'sector_id' });
+
+// Initialize DB
 function initialize() {
-    return new Promise((resolve, reject) => {
-        try {
-            projects = projectData.map((proj) => {
-                const sector = sectorData.find(sec => sec.id === proj.sector_id);
-                return {
-                    ...proj,
-                    sector: sector ? sector.sector_name : "Unknown"
-                };
-            });
-            resolve();
-        } catch (err) {
-            reject("Unable to initialize project data.");
-        }
-    });
+  return sequelize.sync();
 }
 
+// Get all projects with sector
 function getAllProjects() {
-    return new Promise((resolve, reject) => {
-        projects.length > 0 ? resolve(projects) : reject("No projects available");
-    });
+  return Project.findAll({ include: [Sector] });
 }
 
+// Get one project by ID
 function getProjectById(projectId) {
-    return new Promise((resolve, reject) => {
-        const proj = projects.find(p => p.id === projectId);
-        proj ? resolve(proj) : reject("Project not found.");
-    });
+  return Project.findAll({
+    where: { id: projectId },
+    include: [Sector]
+  }).then(data => {
+    if (data.length > 0) return data[0];
+    else throw "Unable to find requested project";
+  });
 }
 
+// Get projects by sector name
 function getProjectsBySector(sector) {
-    return new Promise((resolve, reject) => {
-        const matches = projects.filter(p => p.sector.toLowerCase().includes(sector.toLowerCase()));
-        matches.length > 0 ? resolve(matches) : reject("No matching projects found for sector.");
-    });
+  return Project.findAll({
+    include: [Sector],
+    where: {
+      '$Sector.sector_name$': {
+        [Sequelize.Op.iLike]: `%${sector}%`
+      }
+    }
+  }).then(data => {
+    if (data.length > 0) return data;
+    else throw "Unable to find requested projects";
+  });
 }
 
-module.exports = { initialize, getAllProjects, getProjectById, getProjectsBySector };
+// Add a new project
+function addProject(projectData) {
+  return Project.create(projectData).catch(err => {
+    throw err.errors[0].message;
+  });
+}
+
+// Get all sectors
+function getAllSectors() {
+  return Sector.findAll();
+}
+
+// Edit a project
+function editProject(id, projectData) {
+  return Project.update(projectData, { where: { id } }).catch(err => {
+    throw err.errors[0].message;
+  });
+}
+
+// Delete a project
+function deleteProject(id) {
+  return Project.destroy({ where: { id } }).catch(err => {
+    throw err.errors[0].message;
+  });
+}
+function getAllSectors() {
+  return Sector.findAll();
+}
+
+function addProject(projectData) {
+  return Project.create(projectData).catch(err => {
+    throw err.errors[0].message;
+  });
+}
+
+
+
+module.exports = {
+  initialize,
+  getAllProjects,
+  getProjectById,
+  getProjectsBySector,
+  addProject,
+  getAllSectors,
+  editProject,
+  deleteProject,
+   addProject,
+  getAllSectors
+};
+

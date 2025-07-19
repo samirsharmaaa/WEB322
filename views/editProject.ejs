@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Project - <%= project.title %></title>
+  <link href="/main.css" rel="stylesheet">
+</head>
+<body class="bg-base-200 text-base-content">
+
+  <%- include('partials/navbar', { page: "/solutions/projects" }) %>
+
+  <section class="max-w-3xl mx-auto mt-10 p-6 bg-base-100 rounded-xl shadow-xl">
+    <h1 class="text-3xl font-bold mb-6 text-center">Edit Project</h1>
+    
+    <form method="POST" action="/solutions/editProject/<%= project.id %>" class="space-y-4">
+
+      <div>
+        <label class="label font-semibold">Title</label>
+        <input type="text" name="title" class="input input-bordered w-full" value="<%= project.title %>" required>
+      </div>
+
+      <div>
+        <label class="label font-semibold">Feature Image URL</label>
+        <input type="text" name="feature_img_url" class="input input-bordered w-full" value="<%= project.feature_img_url %>">
+      </div>
+
+      <div>
+        <label class="label font-semibold">Short Summary</label>
+        <textarea name="summary_short" class="textarea textarea-bordered w-full" required><%= project.summary_short %></textarea>
+      </div>
+
+      <div>
+        <label class="label font-semibold">Introduction</label>
+        <textarea name="intro_short" class="textarea textarea-bordered w-full"><%= project.intro_short %></textarea>
+      </div>
+
+      <div>
+        <label class="label font-semibold">Impact</label>
+        <textarea name="impact" class="textarea textarea-bordered w-full"><%= project.impact %></textarea>
+      </div>
+
+      <div>
+        <label class="label font-semibold">Original Source URL</label>
+        <input type="url" name="original_source_url" class="input input-bordered w-full" value="<%= project.original_source_url %>">
+      </div>
+
+      <div>
+        <label class="label font-semibold">Sector</label>
+        <select name="sector_id" class="select select-bordered w-full" required>
+          <% sectors.forEach(sector => { %>
+            <option value="<%= sector.id %>" <%= sector.id === project.sector_id ? 'selected' : '' %>>
+              <%= sector.sector_name %>
+            </option>
+          <% }) %>
+        </select>
+      </div>
+
+      <div class="pt-6 text-center">
+        <button type="submit" class="btn btn-primary w-full">Update Project</button>
+        <a href="/solutions/projects" class="btn btn-ghost w-full mt-2">Cancel</a>
+      </div>
+    </form>
+  </section>
+
+</body>
+</html>

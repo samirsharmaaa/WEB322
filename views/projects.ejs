@@ -1,0 +1,60 @@
+<%- include('partials/navbar', { page: "/solutions/projects" }) %>
+
+<section class="hero bg-base-200 py-10">
+  <div class="text-center">
+    <h1 class="text-4xl font-bold mb-4">Projects</h1>
+    <link href="/main.css" rel="stylesheet">
+    <div class="space-x-2">
+      <a href="/solutions/projects?sector=industry" class="btn btn-outline btn-primary">Industry</a>
+      <a href="/solutions/projects?sector=transportation" class="btn btn-outline btn-primary">Transportation</a>
+      <a href="/solutions/projects?sector=agriculture" class="btn btn-outline btn-primary">Agriculture</a>
+      <a href="/solutions/addProject" class="btn btn-outline btn-accent">+ Add Project</a>
+    </div>
+  </div>
+</section>
+
+<section class="p-6">
+  <div class="overflow-x-auto">
+    <table class="table table-zebra w-full">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Sector</th>
+          <th>Summary</th>
+          <th class="text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% projects.forEach(project => { %>
+          <tr>
+            <td><%= project.title %></td>
+
+            <td>
+              <% if (project.Sector) { %>
+                <a class="btn btn-sm btn-info" href="/solutions/projects?sector=<%= project.Sector.sector_name %>">
+                  <%= project.Sector.sector_name %>
+                </a>
+              <% } else { %>
+                <em>Unknown Sector</em>
+              <% } %>
+            </td>
+
+            <td><%= project.summary_short %></td>
+
+            <td class="flex flex-wrap gap-2 justify-center">
+              <a class="btn btn-sm btn-primary" href="/solutions/projects/<%= project.id %>">Details</a>
+              <a class="btn btn-sm btn-warning" href="/solutions/editProject/<%= project.id %>">Edit</a>
+              <a
+                class="btn btn-sm btn-error"
+                href="/solutions/deleteProject/<%= project.id %>"
+                onclick="return confirm('Are you sure you want to delete this project?');"
+              >
+                Delete
+              </a>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</section>
